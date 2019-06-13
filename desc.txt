@@ -1,0 +1,54 @@
+In this scenario, DataCo’s business question is: What products do our customers like to buy? To answer this question, the first thought might be to look at the transaction data, which should indicate what customers actually do buy and like to buy, right?
+
+This is probably something you can do in your regular RDBMS environment, but a benefit with Cloudera’s platform is that you can do it at greater scale at lower cost, on the same system that you may also use for many other types of analysis.
+
+What this exercise demonstrates is how to do exactly the same thing you may already know how to do with traditional databases, but in CDH. Seamless integration is important when evaluating any new infrastructure. Hence, it’s important to be able to do what you normally do, and not break any regular BI reports or workloads over the dataset you plan to migrate.
+
+
+
+To analyze the transaction data in the new platform, we need to ingest it into the Hadoop Distributed File System (HDFS). We need to find a tool that easily transfers structured data from a RDBMS to HDFS, while preserving structure. That enables us to query the data, but not interfere with or break any regular workload on it.
+
+Apache Sqoop, which is part of CDH, is that tool. The nice thing about Sqoop is that we can automatically load our relational data from MySQL into HDFS, while preserving the structure.
+
+With a few additional configuration parameters, we can take this one step further and load this relational data directly into a form ready to be queried by Impala (the open source analytic query engine included with CDH). Given that we may want to leverage the power of the Apache Avro file format for other workloads on the cluster (as Avro is a Hadoop optimized file format), we will take a few extra steps to load this data into Impala using the Avro file format, so it is readily available for Impala as well as other workloads.
+
+You should first open a terminal, which you can do by clicking the black "Terminal" icon at the top of your screen. Once it is open, you can launch the Sqoop job:
+
+
+sqoop import-all-tables \
+-m 1 \
+--connect jdbc:mysql://localhost:3306/retail_db \
+--username=retail_dba \
+--password=cloudera \
+--compression-codec=snappy \
+--as-parquetfile \
+--warehouse-dir=/user/hive/warehouse \
+--hive-import
+	
+	
+-- Most popular product categories
+select c.category_name, count(order_item_quantity) as count
+from order_items oi
+inner join products p on oi.order_item_product_id = p.product_id
+inner join categories c on c.category_id = p.product_category_id
+group by c.category_name
+order by count desc
+limit 10;
+
+
+-- top 10 revenue generating products
+select p.product_id, p.product_name, r.revenue
+from products p inner join
+(select oi.order_item_product_id, sum(cast(oi.order_item_subtotal as float)) as revenue
+from order_items oi inner join orders o
+on oi.order_item_order_id = o.order_id
+where o.order_status <> 'CANCELED'
+and o.order_status <> 'SUSPECTED_FRAUD'
+group by order_item_product_id) r
+on p.product_id = r.order_item_product_id
+order by r.revenue desc
+limit 10;
+
+
+
+
