@@ -1,0 +1,17 @@
+    def exportDatabase (spark: SparkSession,databaseName: String): Array[String] = {
+      val sqlString="use "+databaseName
+      spark.sql(sqlString)
+      val sqlString1="show tables"
+      val tableList=spark.sql(sqlString1).collect().map(_.get(1).toString)
+      val createTableList=tableList.map(tableName =>{
+        val createTable = spark.sql("show create table "+ tableName).collect.map(_.get(0).toString())
+        createTable(0)
+      }
+
+      )
+      ("user "+databaseName+";") +: createTableList.map(_.replace("HDP59","HDP45").replace("CREATE TABLE","CREATE EXTERNAL TABLE"))
+    }
+
+    val database_list=spark.sql("show databases").collect.map(_.get(0).toString)
+    val exportHql=database_list.flatMap(dataBaseName =>{exportDatabase(spark,dataBaseName)})
+    sc.parallelize(exportHql).saveAsTextFile("/tmp/hsqloutput")
