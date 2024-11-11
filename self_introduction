@@ -1,5 +1,16 @@
 I’m Foster, from GDT wholesale data & analytics platform team. I have been working in HSBC for 5 and half years.  Before I joined HSBC. I had been working as an engineer of ZTE corporation  in India for 4 and half years.  The diversity of culture in india really suprised me. So I learnt the Indian language hindi. And I can talk in Hindi fluently with the Indians. ZTE corportation had a project about  the  big data product. I gained good knowledge about the big data from there. After I quit that job and returned to China, I believed that Hadoop & Spark technology would have a good future. I spent a lot of time to learn about it. In 2019, I entered HSBC as expert of Hadoop & Spark in GBM big data platform team. Back in that time, the team was very new,. We didn’t own any infrastructure. We rent the Hadoop cluster from GBDS team. But the decision was made to build our own infrastructure. Nowadays, we have more than 500 servers. We have 4 hadoop cluster as data platform. We have data ingest platform, micro service platform, data visualization platform . In the meantime, our department got merged into Wholesale IT, and then got merged into GDT.  In the past years,  I participated in most of the technical solutions in the platform. Especially the big data, Linux system, Postgres Database, Airflow scheduler and CICD pipeline. I also have good knowledge about micro-services Elasticsearch and etc.  I have a bunch of certifications, regarding big data, cloud,  data science and deeplearning. 
 
+
+Best project:
+Airflow scheduling service.
+I started to design the airflow scheduling service for Big data systems from January 2020, only half year after I entered HSBC. Due the limited knowledge at that time, I met many difficult issues. Like, how to get the open source software approved, how to setup Postgres database as airflow backend, how integrate with PAR/TPAM, partol and monitoring, LDAP authentication and many other HSBC systems. However, I made it. Today, most of the production jobs on the wholesale Hadoop clusters have been moved to airflow. There are dozens of project teams and thousands of jobs. It helps the team to release fast. It speeds up the delivery. It is quite valuable to the whole team.
+
+Failure:
+The cloud migration project. When we were still in GBM, there was a plan to move our data to the cloud. So we setup a cloud migration team. Eventually we didnt get enough approval to move the data to the cloud. And the project was running out money. Our cloud project was shutdown. However, that is not the end of the story. Some other teams are still working on the cloud project in wholesale. They are quite quite successful.
+
+
+
+
 Hindi:
 Maila num Foster Hei. Mai HSBC mein 5 saar kam kar kiya hai. HSBC anne se bhehle, main ZTE ka India branch company mein karte the.
 
